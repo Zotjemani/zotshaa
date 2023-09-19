@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: radial-gradient(circle, #5b0a91, #1d043a, #000000);
+        }
+
+        .video-container {
+            position: relative;
+            overflow: hidden;
+            width: auto;
+            /* Sesuaikan dengan lebar video Anda */
+            height: auto;
+            /* Sesuaikan dengan tinggi video Anda */
+        }
+
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* Menampilkan video sesuai dengan kontainer */
+            display: none;
+            /* Sembunyikan video secara awal */
+        }
+
+        .loading {
+            color: white;
+            font-size: 24px;
+        }
+
+        .video-title {
+            color: white;
+            font-size: 20px;
+            position: absolute;
+            bottom: 100px;
+            left: 20px;
+            padding: 10px;
+        }
+
+        .myButton {
+            background-color: #44c767;
+            border-radius: 28px;
+            border: 1px solid #18ab29;
+            display: inline-block;
+            cursor: pointer;
+            color: #ffffff;
+            font-family: Arial;
+            font-size: 24px;
+            /* Ukuran font disesuaikan dengan ukuran tanda + yang Anda inginkan */
+            font-weight: bold;
+            padding: 10px 15px;
+            /* Sesuaikan padding sesuai kebutuhan */
+            text-decoration: none;
+            text-align: center;
+            /* Tambahkan untuk membuat teks berada di tengah tombol */
+            width: 40px;
+            /* Sesuaikan lebar tombol sesuai kebutuhan */
+            height: 40px;
+            /* Sesuaikan tinggi tombol sesuai kebutuhan */
+            line-height: 40px;
+            /* Sesuaikan dengan tinggi tombol untuk membuat teks berada di tengah */
+        }
+
+        .myButton:hover {
+            background-color: #5cbf2a;
+        }
+        .myButton-psisi{
+            position: absolute;
+            bottom: 30px;
+            right: 20px;
+        }
+
+        .myButton:active {
+            position: relative;
+            top: 1px;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zot</title>
+</head>
+
+<body>
+    <div class="video-container">
+        <video id="video" autoplay loop onerror="showLoading()">
+            <!-- Gunakan video pertama dari array sebagai video awal -->
+            <source src="video1.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="myButton-psisi"> 
+        <a href="#" class="myButton">+</a>
+    </div>
+
+    <div class="loading" id="loadingText">Loading...</div>
+    <div class="video-title" id="videoTitle">Video Title</div>
+    <script>
+        const video = document.getElementById('video');
+        const loadingText = document.getElementById('loadingText');
+        const videoTitle = document.getElementById('videoTitle');
+        const videos = [
+            { src: 'video1.mp4', title: 'fang' },
+            { src: 'video2.mp4', title: 'Video 2 Title' },
+            { src: 'video3.mp4', title: 'Video 3 Title' },
+            { src: 'video4.mp4', title: 'Video 4 Title' },
+            { src: 'video5.mp4', title: 'Video 5 Title' },
+            { src: 'video6.mp4', title: 'Video 6 Title' }
+        ]; // Ganti dengan nama video Anda
+
+        function getRandomVideo() {
+            const randomIndex = Math.floor(Math.random() * videos.length);
+            return videos[randomIndex];
+        }
+
+        function playRandomVideo() {
+            const { src, title } = getRandomVideo();
+            video.src = src;
+            video.play();
+            videoTitle.textContent = title; // Perbarui judul video saat video diubah
+        }
+
+        function showLoading() {
+            loadingText.style.display = 'block';
+            video.style.display = 'none'; // Sembunyikan video saat proses loading
+            setTimeout(hideLoading, 60000); // Tampilkan "Loading..." selama 60 detik
+        }
+
+        function hideLoading() {
+            loadingText.style.display = 'none';
+            video.style.display = 'block'; // Tampilkan video setelah proses loading selesai
+            video.play();
+        }
+
+        window.addEventListener('wheel', (e) => {
+            if (e.deltaY > 0) {
+                // Scroll ke bawah
+                playRandomVideo();
+            }
+        });
+
+        video.addEventListener('ended', () => {
+            // Setiap kali video berakhir, putar video acak lagi
+            playRandomVideo();
+        });
+
+        video.addEventListener('canplay', () => {
+            // Video dapat diputar
+            hideLoading();
+        });
+
+        video.addEventListener('error', () => {
+            // Kesalahan saat memuat video
+            showLoading();
+        });
+
+        // Play the first video when the page loads
+        video.addEventListener('loadedmetadata', () => {
+            hideLoading();
+        });
+    </script>
+</body>
+
+</html>
